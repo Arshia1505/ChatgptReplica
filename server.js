@@ -7,12 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 
-// Simulate a response from the bot (you can replace this with actual AI logic later)
-/*
-function getBotResponse(userMessage) {
-    return `I'm just a bot, but your message was: ${userMessage}`;
-}
-*/
+
 
 
 
@@ -56,21 +51,4 @@ app.listen(port, () => {
 
 
 
-/*
-// POST endpoint to receive user messages and send bot responses
-app.post('/send-message', (req, res) => {
-    const userMessage = req.body.message;
-    
-    if (!userMessage || userMessage.trim() === '') {
-        return res.status(400).send('Message is required');
-    }
-    
-    const botMessage = getBotResponse(userMessage);  // Get bot response
-    return res.json({ message: botMessage });  // Send response back to the frontend
-});
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
-*/
