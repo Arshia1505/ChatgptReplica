@@ -1,25 +1,3 @@
-// function sendMessage() {
-//     const userInput = document.getElementById('user-input').value;
-//     if (userInput.trim() === '') return;
-
-//     addMessage('user', userInput);
-//     document.getElementById('user-input').value = '';
-
-//     setTimeout(() => {
-//         const botResponse = 'This is a simulated response from ChatGPT.';
-//         addMessage('bot', botResponse);
-//     }, 1000);
-// }
-
-// function addMessage(sender, message) {
-//     const chatMessages = document.getElementById('chat-messages');
-//     const messageElement = document.createElement('div');
-//     messageElement.classList.add('chat-message', sender);
-//     messageElement.textContent = message;
-//     chatMessages.appendChild(messageElement);
-//     chatMessages.scrollTop = chatMessages.scrollHeight;
-// }
-
 
 function appendMessage(content, sender) {
     const chatBox = document.getElementById('chatBox');
@@ -47,11 +25,37 @@ function sendMessage(event) {
 
     
         appendMessage(userMessage, 'user');
-        
-        
-        setTimeout(() => {
-            const botMessage = "I'm just a bot, but your message was: " + userMessage;
+
+        fetch('http://localhost:3000/send-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: userMessage }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the bot's response
+            const botMessage = data.message;
             appendMessage(botMessage, 'bot');
-        }, 1000); 
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            appendMessage("Sorry, something went wrong.", 'bot');
+        });
     }
 }
+function appendMessage(content, sender) {
+    const chatBox = document.getElementById('chatBox');
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+
+    const message = document.createElement('div');
+    message.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    message.textContent = content;
+
+    messageDiv.appendChild(message);
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
